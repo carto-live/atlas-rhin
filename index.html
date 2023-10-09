@@ -1,0 +1,618 @@
+<html>
+
+     <head>
+          
+		<title>Rh(e)in</title>
+		<link rel="icon" type="image/x-icon" href="images/favicon.png">
+		
+     <!-- CHARGEMENT LEAFLET 1.9 -->
+          <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+                integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+                crossorigin=""/>
+          <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+                  integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+                  crossorigin=""></script>
+          
+     <!-- CHARGEMENT SIDE BY SIDE MODIFIE COMPATIBILITE 1.9 -->
+          <script src='packages/leaflet-side-by-side.js'></script>
+          
+     <!-- CHARGEMENT PACKAGE FULLSCREEN -->
+          <link rel="stylesheet" href="packages/Control.FullScreen.css" />
+          <script src="packages/Control.FullScreen.js"></script>
+          
+     <!-- CHARGEMENT AJAX -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js" ></script>
+          
+     <!-- CHARGEMENT JQUERY -->
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+          
+     <!-- CSS -->
+          <style>
+               
+          /* structure générale avec interface carto et deux menus */
+               body {background-color: black ; }
+               #entete { height: 8% ; max-height: 8%; width : 100% ; background-color: black; color: white;}
+               #leftmenu { height: 90%; width: 15%; left:0; top:10%; position:fixed}
+               #map { height: 90%; width: 70%; left:15%; right: 15%; top:10%; position:absolute}
+               #rightmenu { height: 90%; width: 15%; right : 0; top:10%; position:absolute}
+               
+          /* ajouts dans l'interface carto */
+               #infotextleft, #infotextright {font-size: 2em; background: white; opacity: 0.9; padding-left: 10%; padding-right: 10%; font-weight: bold; cursor: grab;}
+               .leaflet-control-scale, .leaflet-interactive {cursor: grab;}
+               
+          /* style texte */
+               h1, h2, h3, h4, h5 {margin-top: 0; margin-bottom: 0; font-family: sans-serif; color: white;}
+               h1 {text-align: center; cursor: default;}
+               h5 {font-weight: lighter;}
+               
+          /* contenu des menus gauche droite */
+               #tableleftmenu {width: 100%; padding-left: 5%; padding-right: 5%; text-align: left; }
+               #tablerightmenu {width: 100%; padding-left: 5%; padding-right: 5%; text-align: right; }
+               td .menucontent { background-color: gray; cursor: pointer;}
+               td .menutext, td .menuexception {font-size: 1.05em; background: white; opacity: 0.8; /*padding-left: 1%; padding-right: 1%; */font-family: sans-serif; vertical-align: middle;}
+			
+          /* panneau supplémentaire légende */
+               #sidepanellegend { height: 100%; width: 0; position: fixed; z-index: 1; top: 0; right: 0; background-color: #111; overflow-x: hidden; padding-top: 5%; transition: 0.5s; }
+               
+          /* bouton fermeture panneau supplémentaire légende */
+               #sidepanellegend a {padding: 8px 8px 8px 32px; text-decoration: none; font-size: 25px; color: #818181; display: block; transition: 0.3s;}
+               #sidepanellegend a:hover {color: #f1f1f1;}
+               #sidepanellegend .closebtn { position: absolute; top: 0; right: 2.5%; font-size: 2em; margin-left: 50px;}
+               
+               /* bouton légende en haut à droite */
+               #entete a {float: right;display: block;color: #f2f2f2;text-align: right;padding: 2% 4%;margin-right: 1%;text-decoration: none;line-height: 0.8;background-color: #333;}
+               #entete a:hover {background-color: #ddd;color: white;}
+               #entete a.active {background-color: #4CAF50;color: white;}
+			
+			#buttonlangueDEtoFR {display: none ;}
+			
+			.modalitelegende {padding-top: 5%;}
+			
+			.menucontent {
+				 background-size: cover;
+        background-position: center left;
+			}
+			
+			.leaflet-control-attribution {font-size: 0.8em; background: rgba(255, 255, 255, 0.8);}
+          
+          </style>
+     
+     </head>
+     
+     <body>
+          
+     <!-- En-tête de la page -->
+          
+          <div id="entete">
+               <table style="width: 100%;"><tbody><tr>
+                    <!--<td style="width: 0%; background-color: grey;"><a href="#" onclick=""><h4>FR&nbsp;/&nbsp;DE</h4></a></td>-->
+                    <td style="width: 100%" id="titregeneral"><h1>&#9632;&nbsp;Le&nbsp;Rhin&nbsp;historique&nbsp;&#9632;</h1></td>
+                    <!--<td style="width: 0%; background-color: grey;"><a href="#" onclick=""><h4>L&eacute;gende</h4></a></td></tr>--></tbody></table>
+          </div>
+          
+     <!-- Menu couches de gauche -->  
+          
+          <div id="leftmenu">
+               
+                <table id="tableleftmenu">
+                     <tbody>
+					<tr><td id="buttonlangueFRtoDE" onclick="FRtoDE()">
+                              <div class="menucontent"><div class="menuexception">Afficher<br>en&nbsp;allemand</div></div>
+                         </td></tr> 
+
+					<tr><td id="buttonlangueDEtoFR" onclick="DEtoFR()">
+                              <div class="menucontent"><div class="menuexception">Auf&nbsp;Franz&ouml;sisch<br>anzeigen</div></div>
+                         </td></tr> 
+					 
+					<tr><td>
+						<div class=""><div class="menutext"></div><br></div>
+                         </td></tr> 
+                          
+                         <tr><td onclick="left1778()">
+                              <div class="menucontent" style="background-image:url('images/1778_couleur.png')"><div class="menutext">1778</div></div>
+                         </td></tr> 
+                         <tr><td onclick="left1828()">
+                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">1828</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1838_couleur.png')"><div class="menutext">1838</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1872_couleur.png')"><div class="menutext">1872</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">20XX</div></div>
+                         </td></tr> 
+                    </tbody>
+               </table>
+              
+
+              
+          </div>
+          
+     <!-- Interface cartographique --> 
+          
+          <div id="map"></div>
+          
+     <!-- Menu couches de droite -->      
+          
+          <div id="rightmenu">
+               
+                <table id="tablerightmenu">
+                    <tbody>
+					
+					<tr><td onclick="openNav()">
+                              <div class="menucontent"><div class="menutext" id="afficherlegende">Afficher<br>la&nbsp;l&eacute;gende</div></div>
+                         </td></tr> 
+					<tr><td>
+                              <div class=""><div class="menutext"></div><br></div>
+                         </td></tr> 
+					
+					
+                         <tr><td onclick="right1778()">
+                              <div class="menucontent" style="background-image:url('images/1778_couleur.png')"><div class="menutext">1778</div></div>
+                         </td></tr> 
+                         <tr><td onclick="right1828()">
+                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">1828</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1838_couleur.png')"><div class="menutext">1838</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1872_couleur.png')"><div class="menutext">1872</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
+                         </td></tr> 
+                         <tr><td>
+                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">20XX</div></div>
+                         </td></tr> 
+                    </tbody>
+               </table>
+               
+               
+               
+          </div>
+          
+          
+          <div id="sidepanellegend">
+               
+               <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+               
+               <h2 style="margin-left: 4%;" id="titrelegende">L&eacute;gende</h2>
+               <h3 style="margin-left: 4%;" id="soustitrelegende">commune &agrave; toutes les dates</h3>
+               
+               <br>
+               
+               
+               
+               <table id="legendcontent" style="width: 10%; margin-left: 4%;">
+                    <tbody>
+                         <tr>
+						<td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendeforet">Zones&nbsp;foresti&egrave;res</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #d3e2b6; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendeagricole">Zones&nbsp;agricoles</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #CD5C5C; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendeurbanise">Zones&nbsp;urbanis&eacute;es</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #e2af69; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendegraviers">Bancs&nbsp;de&nbsp;graviers</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #696969; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendeamenagements">Am&eacute;nagements</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #4682B4; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendezoneseneau">Zones&nbsp;en&nbsp;eau</h5></td>
+                         </tr>
+                         
+                         <tr>
+						<td style="width: 3%; color: #f9f2b3; font-size: 1.5em; vertical-align: middle; padding-bottom: 12%;"><div class="modalitelegende">&#9632;</div></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 class="modalitelegende" id="legendechenauxsecs">Chenaux&nbsp;secs</h5></td>
+                         </tr>
+                         
+                    </tbody>
+               </table>
+			
+			<br>
+			<hr>
+			
+			<h3 style="margin-left: 4%;" id="titrethalwegs">Afficher les thalwegs</h3>
+			<br>
+			
+			
+			<table id="checkboxesthalwegs" style="width: 10%; margin-left: 4%;">
+                    <tbody>
+                         <tr>
+                              <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1779" onchange="functionthalweg1779()"></td>
+						<td style="width: 7%; vertical-align: middle;"><h5 id="">1778&nbsp;<span style="color: #ff7f00; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+                         </tr>
+                         
+					<tr>
+                              <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1828" onchange="functionthalweg1828()"></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 id="">1828&nbsp;<span style="color: #6a3d9a; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+                         </tr>
+					
+					<tr>
+                              <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1838" onchange="functionthalweg1838()"></td>
+						<td style="width: 7%; vertical-align: middle;"><h5 id="">1838&nbsp;<span style="color:  #e31a1c; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+                         </tr>
+                         
+					<tr>
+                              <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1872" onchange="functionthalweg1872()"></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 id="">1872&nbsp;<span style="color: #b15928; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+                         </tr>
+                        
+                        
+					
+                    </tbody>
+               </table>
+               
+               <br>
+               
+               
+          
+          </div>
+          
+          
+          <script>
+               
+			
+		//	var southWest = L.latLng(47.5, 7.25),
+            //    northEast = L.latLng(49.25, 8.5),
+              //  bounds = L.latLngBounds(southWest, northEast);
+			
+			
+			
+			
+			
+               // interface carto centrée sur stras, deux panneaux gauche et droite
+               var map = L.map('map', {maxZoom: 17,
+    minZoom: 11,zoomControl: false}).setView([48.5, 7.8], 13)
+			//.setMaxBounds(bounds)
+			;
+			
+               map.createPane('left');
+               map.createPane('right');
+			map.createPane('thalwegs');
+			
+			
+			
+			
+			
+			
+			
+               
+               var baseMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                layers: baseMap
+            }).addTo(map);
+
+            var baseMapIndex = {
+                "BaseMap": baseMap
+            };
+               
+               
+               
+               
+               
+            
+               
+
+               
+               
+                 // Configuration de l'affichage des unités spatiales : gamme de couleur 
+            function getColor(d) {
+                return 	d == 1   ? '#d3e2b6' :
+                         d == 2   ? '#556B2F' :
+                         d == 3   ? '#CD5C5C' :
+                         d == 4   ? '#696969' :
+                         d == 5   ? '#e2af69' :
+                         d == 6   ? '#4682B4' :
+                         d == 7   ? '#f9f2b3' :
+                         d == 8   ? '#4682B4' :
+                         d == 9   ? '#4682B4' :
+                         d == 10  ? '#4682B4' :
+                         d == 11  ? '#4682B4' :
+                         d == 12  ? '#4682B4' :
+                         d == 13  ? '#4682B4' :
+                         d == 14  ? '#4682B4' :
+                         d == 15  ? '#4682B4' :
+                         d == 16  ? '#4682B4' :
+                         d == 17  ? '#4682B4' :
+                         d == 18  ? '#4682B4' :
+                         d == 19  ? '#4682B4' :
+                                    '#DC143C';
+            }
+               
+               
+               
+            // Affichage classique de chaque unité spatiale 
+            function style(feature) {
+                return {
+                    weight: 0.5, // bordure 
+                    opacity: 1, 
+                    color: getColor(feature.properties.CODE),
+                    //dashArray: '3',
+                    fillOpacity: 1, // opacité de la couleur de remplissage 
+                    fillColor: getColor(feature.properties.CODE) // couleur de remplissage : appel à la fonction getColor crée précédemment et aux propriétés du fichier json, en particulier la colonne DATA
+                };
+            }
+	        
+	  
+           
+            
+               
+                  var geojson1778left = new L.GeoJSON.AJAX("sources/occ_1778.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2).addTo(map);
+               
+               var geojson1828left = new L.GeoJSON.AJAX("sources/occ_1828.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
+               
+               var geojson1778right = new L.GeoJSON.AJAX("sources/occ_1778.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
+               
+               var geojson1828right = new L.GeoJSON.AJAX("sources/occ_1828.geojson", {
+                style: style,
+                //onEachFeature: onEachFeature1828,
+                 pane: 'right'
+            }).setZIndex(2).addTo(map);
+               
+               
+      
+               
+               
+               
+               
+               
+               
+               
+               
+               
+      var catedralVieja =
+    "",
+  imageBounds = [
+    [7.9409, -131.1589],
+    [29.2144, -82.6558]
+  ];
+var leftLayer = L.imageOverlay(catedralVieja, imageBounds, {
+  pane: 'left'
+}).addTo(map);
+
+var catedralNueva = "",
+  imageBounds = [
+    [7.9409, -131.1589],
+    [29.2144, -82.6558]
+  ];
+var rightLayer = L.imageOverlay(catedralNueva, imageBounds, {
+  pane: 'right'
+}).addTo(map);
+
+               
+               
+
+L.control.sideBySide(leftLayer, rightLayer).addTo(map);
+     
+               L.control.zoom({
+    position: 'bottomleft'
+}).addTo(map);
+               
+               
+L.control.scale({
+    position: 'bottomright',
+	imperial : false
+}).addTo(map);
+
+
+               L.Control.textbox1 = L.Control.extend({
+                    onAdd: function(map) {
+                         var text = L.DomUtil.create('div');
+                         text.id = "infotextleft";
+                         text.innerHTML = "1778"
+                         return text;
+                    },
+                    onRemove: function(map) {
+                         // Nothing to do here
+                    }
+               });
+               L.control.textbox1 = function(opts) { return new L.Control.textbox1(opts);}
+               L.control.textbox1({ position: 'topleft' }).addTo(map);
+               
+               L.Control.textbox2 = L.Control.extend({
+                    onAdd: function(map) {
+                         var text = L.DomUtil.create('div');
+                         text.id = "infotextright";
+                         text.innerHTML = "1828"
+                         return text;
+                    },
+                    onRemove: function(map) {
+                         // Nothing to do here
+                    }
+               });
+               L.control.textbox2 = function(opts) { return new L.Control.textbox2(opts);}
+               L.control.textbox2({ position: 'topright' }).addTo(map);
+               
+               
+                $(".menucontent").height($(document).height() / 11/*7.1*/);
+  window.addEventListener("resize", function() {
+    $(".menucontent").height($(document).height() / 11/*7.1*/ );
+  });
+              
+			
+			$(".modalitelegende").height($(window).height() / 8);
+  window.addEventListener("resize", function() {
+    $(".modalitelegende").height($(window).height() / 8 );
+  });
+              
+                
+                
+			
+               
+               var geojsonthalweg1779 = new L.GeoJSON.AJAX("sources/thalweg_1779.geojson", {
+                style: { weight: 4, opacity: 1, color: "#ff7f00", dashArray: '5'},
+                 pane: 'thalwegs',
+			}).setZIndex(1);
+               
+               var geojsonthalweg1828 = new L.GeoJSON.AJAX("sources/thalweg_1828.geojson", {
+                style: { weight: 4, opacity: 1, color: "#6a3d9a", dashArray: '5'},
+                 pane: 'thalwegs',
+			}).setZIndex(1);
+               
+               var geojsonthalweg1838 = new L.GeoJSON.AJAX("sources/thalweg_1838.geojson", {
+                style: { weight: 4, opacity: 1, color: "#e31a1c", dashArray: '5'},
+                 pane: 'thalwegs',
+			}).setZIndex(1);
+               
+               var geojsonthalweg1872 = new L.GeoJSON.AJAX("sources/thalweg_1872.geojson", {
+                style: { weight: 4, opacity: 1, color: "#b15928", dashArray: '5'},
+                 pane: 'thalwegs',
+			}).setZIndex(1);
+               
+               
+               
+               
+               function left1778() {
+                    map.addLayer(geojson1778left);
+                    map.removeLayer(geojson1828left);
+                    $("#infotextleft")[0].innerHTML = '1778'
+               }
+               
+               function left1828() {
+                    map.removeLayer(geojson1778left);
+                    map.addLayer(geojson1828left);
+                    $("#infotextleft")[0].innerHTML = '1828'
+               }
+               
+               function right1778() {
+                    map.addLayer(geojson1778right);
+                    map.removeLayer(geojson1828right);
+                    $("#infotextright")[0].innerHTML = '1778'
+               }
+               
+               function right1828() {
+                    map.removeLayer(geojson1778right);
+                    map.addLayer(geojson1828right);
+                    $("#infotextright")[0].innerHTML = '1828'
+               }
+               
+//L.control
+  //.sideBySide(L.featureGroup(leftLayer), //L.featureGroup(rightLayer))
+//  .addTo(map);
+               
+               
+/*
+               map.fitBounds([
+    [47.5, 7.3],
+    [49.0, 8.40]
+]);
+      */         
+               
+               L.control.fullscreen({
+  position: 'bottomleft', // change the position of the button can be topleft, topright, bottomright or bottomleft, default topleft
+  title: 'Plein ecran', // change the title of the button, default Full Screen
+  titleCancel: 'Retour', // change the title of the button when fullscreen is on, default Exit Full Screen
+  content: null, // change the content of the button, can be HTML, default null
+  forceSeparateButton: true, // force separate button to detach from zoom buttons, default false
+  forcePseudoFullscreen: false, // force use of pseudo full screen even if full screen API is available, default false
+  fullscreenElement: false // Dom element to render in full screen, false by default, fallback to map._container
+}).addTo(map);
+               
+               
+               
+   function openNav() {
+
+    document.getElementById("sidepanellegend").style.width = "30%";
+
+  
+    document.getElementById("leftmenu").style.visibility = "hidden";
+    document.getElementById("rightmenu").style.visibility = "hidden";
+        document.getElementById("map").style.left = "0%";
+       // document.getElementById("map").style.width = "85%";
+       
+
+}
+
+function closeNav() {
+
+    document.getElementById("sidepanellegend").style.width = "0";
+     document.getElementById("leftmenu").style.visibility = "visible";
+    document.getElementById("rightmenu").style.visibility = "visible";
+     document.getElementById("map").style.left = "15%";
+    // document.getElementById("map").style.width = "70%";
+
+}
+			
+			
+			function FRtoDE() {
+				document.getElementById("buttonlangueFRtoDE").style.display = "none";
+				document.getElementById("buttonlangueDEtoFR").style.display = "block";
+				$("#titregeneral").html("<h1>&#9632;&nbsp;Historischer&nbsp;Rhein&nbsp;&#9632;</h1>");
+				$("#afficherlegende").html("Legend<br>anzeigen");
+				$("#titrelegende").html("Legend");
+				$("#soustitrelegende").html("&#x28;gleich&nbsp;f&#xFC;r&nbsp;alle&nbsp;Daten&#x29;");
+				$("#legendeforet").html("Waldgebiete");
+				$("#legendeagricole").html("landwirtschaftliche&nbsp;Gebiete");
+				$("#legendeurbanise").html("bebaute&nbsp;Gebiete");
+				$("#legendegraviers").html("Kiesb&atilde;nke");
+				$("#legendeamenagements").html("Ausbauen");
+				$("#legendezoneseneau").html("Wassergebiete");
+				$("#legendechenauxsecs").html("trockene&nbsp;Fahrrinnen");
+				$("#titrethalwegs").html("Thalwege anzeigen");
+			}
+              
+               function DEtoFR() {
+				document.getElementById("buttonlangueFRtoDE").style.display = "block";
+				document.getElementById("buttonlangueDEtoFR").style.display = "none";
+				$("#titregeneral").html("<h1>&#9632;&nbsp;Le&nbsp;&nbsp;Rhin&nbsp;historique&nbsp;&#9632;</h1>");
+				$("#afficherlegende").html("Afficher<br>la&nbsp;l&eacute;gende");
+				$("#titrelegende").html("L&eacute;gende");
+				$("#soustitrelegende").html("commune &agrave; toutes les dates");
+				$("#legendeforet").html("Zones&nbsp;foresti&egrave;res");
+				$("#legendeagricole").html("Zones&nbsp;agricoles");
+				$("#legendeurbanise").html("Zones&nbsp;urbanis&eacute;es");
+				$("#legendegraviers").html("Bancs&nbsp;de&nbsp;graviers");
+				$("#legendeamenagements").html("Am&eacute;nagements");
+				$("#legendezoneseneau").html("Zones&nbsp;en&nbsp;eau");
+				$("#legendechenauxsecs").html("Chenaux&nbsp;secs");
+				$("#titrethalwegs").html("Afficher les thalwegs");
+			}
+               
+			
+			
+			function functionthalweg1779() {if (document.getElementById("checkboxthalweg1779").checked) {map.addLayer(geojsonthalweg1779);} else {map.removeLayer(geojsonthalweg1779);}}
+			
+               function functionthalweg1828() {if (document.getElementById("checkboxthalweg1828").checked) {map.addLayer(geojsonthalweg1828);} else {map.removeLayer(geojsonthalweg1828);}}
+			
+			function functionthalweg1838() {if (document.getElementById("checkboxthalweg1838").checked) {map.addLayer(geojsonthalweg1838);} else {map.removeLayer(geojsonthalweg1838);}}
+			
+               function functionthalweg1872() {if (document.getElementById("checkboxthalweg1872").checked) {map.addLayer(geojsonthalweg1872);} else {map.removeLayer(geojsonthalweg1872);}}
+			
+			
+			
+			
+    </script>
+  </body>
+</html>
