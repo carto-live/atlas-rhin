@@ -114,18 +114,18 @@
                          <tr><td onclick="left1828()">
                               <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">1828</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="left1838()">
                               <div class="menucontent" style="background-image:url('images/1838_couleur.png')"><div class="menutext">1838</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="left1872()">
                               <div class="menucontent" style="background-image:url('images/1872_couleur.png')"><div class="menutext">1872</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="left1925()">
                               <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
                          </td></tr> 
-                         <tr><td>
-                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">20XX</div></div>
-                         </td></tr> 
+                         <tr><td onclick="left2021()">
+                              <div class="menucontent" style="background-image:url('images/Image_2021.jpg')"><div class="menutext">2021</div></div>
+                         </td></tr> -->
                     </tbody>
                </table>
               
@@ -158,17 +158,17 @@
                          <tr><td onclick="right1828()">
                               <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">1828</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="right1838()">
                               <div class="menucontent" style="background-image:url('images/1838_couleur.png')"><div class="menutext">1838</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="right1872()">
                               <div class="menucontent" style="background-image:url('images/1872_couleur.png')"><div class="menutext">1872</div></div>
                          </td></tr> 
-                         <tr><td>
+                         <tr><td onclick="right1925()">
                               <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
                          </td></tr> 
-                         <tr><td>
-                              <div class="menucontent" style="background-image:url('images/1828_couleur.png')"><div class="menutext">20XX</div></div>
+                         <tr><td onclick="right2021()">
+                              <div class="menucontent" style="background-image:url('images/Image_2021.jpg')"><div class="menutext">2021</div></div>
                          </td></tr> 
                     </tbody>
                </table>
@@ -236,11 +236,11 @@
 			<br>
 			
 			
-			<table id="checkboxesthalwegs" style="width: 10%; margin-left: 4%;">
+			<table id="checkboxesthalwegs" style="width: 10%; margin-left: 4%; border: 5px white; ">
                     <tbody>
                          <tr>
                               <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1779" onchange="functionthalweg1779()"></td>
-						<td style="width: 7%; vertical-align: middle;"><h5 id="">1778&nbsp;<span style="color: #ff7f00; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+						<td style="width: 20%; vertical-align: middle;"><h5 id="">1778&nbsp;<span style="color: #ff7f00; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
                          </tr>
                          
 					<tr>
@@ -255,7 +255,7 @@
                          
 					<tr>
                               <td style="width: 3%; color: #556b2f; font-size: 1.5em; vertical-align: middle; padding-bottom: 5%;"><input type="checkbox" id="checkboxthalweg1872" onchange="functionthalweg1872()"></td>
-                              <td style="width: 7%; vertical-align: middle;"><h5 id="">1872&nbsp;<span style="color: #b15928; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
+                              <td style="width: 7%; vertical-align: middle;"><h5 id="">1872-1925&nbsp;<span style="color: #b15928; font-weight: 1000; letter-spacing: -1px;">---&nbsp;---&nbsp;---&nbsp;---&nbsp;</span></h5></td>
                          </tr>
                         
                         
@@ -339,6 +339,7 @@
                          d == 17  ? '#4682B4' :
                          d == 18  ? '#4682B4' :
                          d == 19  ? '#4682B4' :
+			 		d == 30  ? '#4682B4' :
                                     '#DC143C';
             }
                
@@ -360,27 +361,66 @@
            
             
                
-                  var geojson1778left = new L.GeoJSON.AJAX("sources/occ_1778.geojson", {
+                  var geojson1778left = new L.GeoJSON.AJAX("sources/new_occ_1778.geojson", {
                 style: style,
                  pane: 'left'
             }).setZIndex(2).addTo(map);
                
-               var geojson1828left = new L.GeoJSON.AJAX("sources/occ_1828.geojson", {
+          
+               var geojson1778right = new L.GeoJSON.AJAX("sources/new_occ_1778.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
+			
+			     var geojson1828left = new L.GeoJSON.AJAX("sources/new_occ_1828.geojson", {
                 style: style,
                  pane: 'left'
             }).setZIndex(2);
                
-               var geojson1778right = new L.GeoJSON.AJAX("sources/occ_1778.geojson", {
+               var geojson1828right = new L.GeoJSON.AJAX("sources/new_occ_1828.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2).addTo(map);
+               
+			var geojson1838left = new L.GeoJSON.AJAX("sources/new_occ_1838.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
+               
+               var geojson1838right = new L.GeoJSON.AJAX("sources/new_occ_1838.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
+			
+			var geojson1872left = new L.GeoJSON.AJAX("sources/new_occ_1872.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
+               
+               var geojson1872right = new L.GeoJSON.AJAX("sources/new_occ_1872.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
+			
+			var geojson1925left = new L.GeoJSON.AJAX("sources/new_occ_1925.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
+               
+               var geojson1925right = new L.GeoJSON.AJAX("sources/new_occ_1925.geojson", {
                 style: style,
                  pane: 'right'
             }).setZIndex(2);
                
-               var geojson1828right = new L.GeoJSON.AJAX("sources/occ_1828.geojson", {
+				var geojson2021left = new L.GeoJSON.AJAX("sources/new_occ_2021.geojson", {
                 style: style,
-                //onEachFeature: onEachFeature1828,
-                 pane: 'right'
-            }).setZIndex(2).addTo(map);
+                 pane: 'left'
+            }).setZIndex(2);
                
+               var geojson2021right = new L.GeoJSON.AJAX("sources/new_occ_2021.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
                
       
                
@@ -496,28 +536,78 @@ L.control.scale({
                
                function left1778() {
                     map.addLayer(geojson1778left);
-                    map.removeLayer(geojson1828left);
+                    map.removeLayer(geojson1828left, geojson1838left, geojson1872left, geojson1925left, geojson2021left);
                     $("#infotextleft")[0].innerHTML = '1778'
                }
                
                function left1828() {
-                    map.removeLayer(geojson1778left);
                     map.addLayer(geojson1828left);
+                    map.removeLayer(geojson1778left, geojson1838left, geojson1872left, geojson1925left, geojson2021left);
                     $("#infotextleft")[0].innerHTML = '1828'
                }
+			function left1838() {
+                    map.addLayer(geojson1838left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1872left, geojson1925left, geojson2021left);
+                    $("#infotextleft")[0].innerHTML = '1838'
+               }
                
+               function left1872() {
+                    map.addLayer(geojson1872left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1925left, geojson2021left);
+                    $("#infotextleft")[0].innerHTML = '1872'
+               }
+			function left1925() {
+                    map.addLayer(geojson1925left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1872left, geojson2021left);
+                    $("#infotextleft")[0].innerHTML = '1925'
+               }
+               
+			function left2021() {
+                    map.addLayer(geojson2021left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1872left, geojson1925left);
+                    $("#infotextleft")[0].innerHTML = '2021'
+               }
+			
+			
+			
+			
                function right1778() {
                     map.addLayer(geojson1778right);
-                    map.removeLayer(geojson1828right);
+                    map.removeLayer(geojson1828right, geojson1838right, geojson1872right, geojson1925right, geojson2021right);
                     $("#infotextright")[0].innerHTML = '1778'
                }
                
                function right1828() {
-                    map.removeLayer(geojson1778right);
                     map.addLayer(geojson1828right);
+                    map.removeLayer(geojson1778right, geojson1838right, geojson1872right, geojson1925right, geojson2021right);
                     $("#infotextright")[0].innerHTML = '1828'
                }
+			function right1838() {
+                    map.addLayer(geojson1838right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1872right, geojson1925right, geojson2021right);
+                    $("#infotextright")[0].innerHTML = '1838'
+               }
                
+               function right1872() {
+                    map.addLayer(geojson1872right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1925right, geojson2021right);
+                    $("#infotextright")[0].innerHTML = '1872'
+               }
+			function right1925() {
+                    map.addLayer(geojson1925right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson2021right);
+                    $("#infotextright")[0].innerHTML = '1925'
+               }
+			
+			
+			function right2021() {
+                    map.addLayer(geojson2021right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson1925right);
+				if (map.hasLayer(geojson2021right)) {
+                    $("#infotextright")[0].innerHTML = '2021'}
+               }
+               
+             
 //L.control
   //.sideBySide(L.featureGroup(leftLayer), //L.featureGroup(rightLayer))
 //  .addTo(map);
