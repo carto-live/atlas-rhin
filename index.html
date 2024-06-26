@@ -580,7 +580,10 @@ L.control.scale({
                }
                
 			function left2021() {
-                    map.addLayer(geojson2021left);
+                    map.addLayer(geojson2021left_part1);
+                    map.addLayer(geojson2021left_part2);
+                    map.addLayer(geojson2021left_part3);
+                    
                     map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1872left, geojson1925left);
                     $("#infotextleft")[0].innerHTML = '2021'
                }
@@ -618,7 +621,9 @@ L.control.scale({
 			
 			
 			function right2021() {
-                    map.addLayer(geojson2021right);
+                    map.addLayer(geojson2021right_part1);
+                    map.addLayer(geojson2021right_part2);
+                    map.addLayer(geojson2021right_part3);
                     map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson1925right);
 				$("#infotextright")[0].innerHTML = '2021'
                }
