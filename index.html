@@ -124,7 +124,7 @@
                               <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
                          </td></tr> 
                          <tr><td onclick="left2021()">
-                              <div class="menucontent" style="background-image:url('images/Image_2021.JPG')"><div class="menutext">2021</div></div>
+                              <div class="menucontent" style="background-image:url('images/Image_2021.jpg')"><div class="menutext">2021</div></div>
                          </td></tr> -->
                     </tbody>
                </table>
@@ -168,7 +168,7 @@
                               <div class="menucontent" style="background-image:url('images/1925_couleur.png')"><div class="menutext">1925</div></div>
                          </td></tr> 
                          <tr><td onclick="right2021()">
-                              <div class="menucontent" style="background-image:url('images/Image_2021.JPG')"><div class="menutext">2021</div></div>
+                              <div class="menucontent" style="background-image:url('images/Image_2021.jpg')"><div class="menutext">2021</div></div>
                          </td></tr> 
                     </tbody>
                </table>
@@ -412,18 +412,35 @@
                  pane: 'right'
             }).setZIndex(2);
                
-				var geojson2021left = new L.GeoJSON.AJAX("sources/new_occ_2021.geojson", {
+				var geojson2021left_part1 = new L.GeoJSON.AJAX("sources/new_occ_2021_part1.geojson", {
                 style: style,
                  pane: 'left'
             }).setZIndex(2);
                
-               var geojson2021right = new L.GeoJSON.AJAX("sources/new_occ_2021.geojson", {
+               var geojson2021right_part1 = new L.GeoJSON.AJAX("sources/new_occ_2021_part1.geojson", {
                 style: style,
                  pane: 'right'
             }).setZIndex(2);
+			
+               var geojson2021left_part2 = new L.GeoJSON.AJAX("sources/new_occ_2021_part2.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
                
+               var geojson2021right_part2 = new L.GeoJSON.AJAX("sources/new_occ_2021_part2.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
       
+               var geojson2021left_part3 = new L.GeoJSON.AJAX("sources/new_occ_2021_part3.geojson", {
+                style: style,
+                 pane: 'left'
+            }).setZIndex(2);
                
+               var geojson2021right_part3 = new L.GeoJSON.AJAX("sources/new_occ_2021_part3.geojson", {
+                style: style,
+                 pane: 'right'
+            }).setZIndex(2);
                
                
                
@@ -536,29 +553,29 @@ L.control.scale({
                
                function left1778() {
                     map.addLayer(geojson1778left);
-                    map.removeLayer(geojson1828left, geojson1838left, geojson1872left, geojson1925left, geojson2021left);
+                    map.removeLayer(geojson1828left, geojson1838left, geojson1872left, geojson1925left, geojson2021left_part1, geojson2021left_part2, geojson2021left_part3);
                     $("#infotextleft")[0].innerHTML = '1778'
                }
                
                function left1828() {
                     map.addLayer(geojson1828left);
-                    map.removeLayer(geojson1778left, geojson1838left, geojson1872left, geojson1925left, geojson2021left);
+                    map.removeLayer(geojson1778left, geojson1838left, geojson1872left, geojson1925left, geojson2021left_part1, geojson2021left_part2, geojson2021left_part3);
                     $("#infotextleft")[0].innerHTML = '1828'
                }
 			function left1838() {
                     map.addLayer(geojson1838left);
-                    map.removeLayer(geojson1778left, geojson1828left, geojson1872left, geojson1925left, geojson2021left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1872left, geojson1925left, geojson2021left_part1, geojson2021left_part2, geojson2021left_part3);
                     $("#infotextleft")[0].innerHTML = '1838'
                }
                
                function left1872() {
                     map.addLayer(geojson1872left);
-                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1925left, geojson2021left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1925left, geojson2021left_part1, geojson2021left_part2, geojson2021left_part3);
                     $("#infotextleft")[0].innerHTML = '1872'
                }
 			function left1925() {
                     map.addLayer(geojson1925left);
-                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1872left, geojson2021left);
+                    map.removeLayer(geojson1778left, geojson1828left, geojson1838left, geojson1872left, geojson2021left_part1, geojson2021left_part2, geojson2021left_part3);
                     $("#infotextleft")[0].innerHTML = '1925'
                }
                
@@ -573,29 +590,29 @@ L.control.scale({
 			
                function right1778() {
                     map.addLayer(geojson1778right);
-                    map.removeLayer(geojson1828right, geojson1838right, geojson1872right, geojson1925right, geojson2021right);
+                    map.removeLayer(geojson1828right, geojson1838right, geojson1872right, geojson1925right, geojson2021right_part1, geojson2021right_part2, geojson2021right_part3);
                     $("#infotextright")[0].innerHTML = '1778'
                }
                
                function right1828() {
                     map.addLayer(geojson1828right);
-                    map.removeLayer(geojson1778right, geojson1838right, geojson1872right, geojson1925right, geojson2021right);
+                    map.removeLayer(geojson1778right, geojson1838right, geojson1872right, geojson1925right, geojson2021right_part1, geojson2021right_part2, geojson2021right_part3);
                     $("#infotextright")[0].innerHTML = '1828'
                }
 			function right1838() {
                     map.addLayer(geojson1838right);
-                    map.removeLayer(geojson1778right, geojson1828right, geojson1872right, geojson1925right, geojson2021right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1872right, geojson1925right, geojson2021right_part1, geojson2021right_part2, geojson2021right_part3);
                     $("#infotextright")[0].innerHTML = '1838'
                }
                
                function right1872() {
                     map.addLayer(geojson1872right);
-                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1925right, geojson2021right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1925right, geojson2021right_part1, geojson2021right_part2, geojson2021right_part3);
                     $("#infotextright")[0].innerHTML = '1872'
                }
 			function right1925() {
                     map.addLayer(geojson1925right);
-                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson2021right);
+                    map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson2021right_part1, geojson2021right_part2, geojson2021right_part3);
                     $("#infotextright")[0].innerHTML = '1925'
                }
 			
@@ -603,8 +620,7 @@ L.control.scale({
 			function right2021() {
                     map.addLayer(geojson2021right);
                     map.removeLayer(geojson1778right, geojson1828right, geojson1838right, geojson1872right, geojson1925right);
-				if (map.hasLayer(geojson2021right)) {
-                    $("#infotextright")[0].innerHTML = '2021'}
+				$("#infotextright")[0].innerHTML = '2021'
                }
                
              
